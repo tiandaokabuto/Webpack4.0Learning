@@ -11,4 +11,24 @@
 2.模块引入方式有多种，有ES Module，CommonJS（Node常用），CMD，ADM。
 3.webpack是什么？是Bundler，模块打包工具，import中引入的就是模块。一开始的webpack
   只能打包js文件，如今可以打包其他文件，如css文件，图片文件。
-4.搭建webpack环境：webpack是基于NodeJS开发的模块打包工具，所以要先安装NodeJS
+4.搭建webpack环境：webpack是基于NodeJS开发的模块打包工具，所以要先安装NodeJS。
+  安装完之后使用npm init在文件夹下生成一个package.json文件。
+  修改配置，“private”：true，表示项目是私有，不会被发布到npm线上仓库。
+  “main”的配置去掉，表示不对外暴露。
+  “scripts”的配置可以配置一些命令。
+  全局安装：npm install webpack webpack-cli -g （不推荐）
+  全局卸载：npm uninstall webpack webpack-cli -g
+  局部安装：npm install webpack webpack-cli --save-dev (--save-dev可以改成-D)
+  安装具体版本：npm install webpack@4.16.0 webpack-cli -D
+  查询全局：webpack -v 在全局获取版本号
+  查询本地：npx webpack -v 在本项目获取版本号
+  打包：(npx) webpack index.json
+5.webpack的配置文件webpack.config.js。可以在里面指定生成目录路径，目录名字，以及入口
+  js的名字。如果配置文件不叫webpack.config.js，要使用(npx) webpack --config 文件名
+  进行打包。进行打包的文件index.jx不在浏览器上直接运行，真正运行的是打包后生成的js文件，
+  index.js称为源代码，一般放在src目录下。
+  在package.js配置scripts，“bundle”：“webpack”。之后可以使用npm run bundle 进行打包。
+  配置了之后打包的过程中会首先找本地的webpack，如果没找到再找全局的webpack。
+6.webpack-cli的作用是使webpack命令可以在命令行工具里正确运行。
+7.打包的时候在命令行输出的信息。Hash本次打包的唯一哈希值。version本次打包使用的webpack版
+  本。time是打包耗时。
