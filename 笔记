@@ -32,3 +32,30 @@
 6.webpack-cli的作用是使webpack命令可以在命令行工具里正确运行。
 7.打包的时候在命令行输出的信息。Hash本次打包的唯一哈希值。version本次打包使用的webpack版
   本。time是打包耗时。
+8.webpack默认配置是只能打包js文件，如果要打包其他类型的文件需要借助于loader。在webpack的
+  配置文件中添加module，在里面添加rules数组，在数组里面添加对象，属性test是匹配文件后缀的
+  正则表达式，对象属性use添加的是使用的loader名称，对象属性options里面可以修改生成文件的
+  名字。如果要使用多个loader，user可以使用数组形式，加载顺序是从下到上，从右到左。
+9.file-loader可以把文件打包到某个目录下。url-loader将文件以DataURL的形式的url写入js文件
+  里面（适用于小文件），可以加上一个limit属性来根据文件大小判断文件是生成到目录下还是变成
+  DataURL。
+10.sass-loader可以识别scss文件（同时要安装node-sass），css-loader可以打包css文件，
+   style-loader可以把css挂载到页面顶部，postcss-loader可以在css3语法前面自动添加浏览器厂
+   商的前缀（要配合postcss.confit.js配置文件进行设置，同时要安装autoprefixer插件，如果配
+   置不成功，在package.json里面添加browserslist配置项）。
+11.入口文件引入的样式文件会作用于全局，需要用模块化css来解决这个问题，在css-loader中把modules
+   设置为true，并在引入css文件时给它定义一个名字。
+12.打包的时候如果要使用字体样式，比如iconfont，可以使用file-loader根据后缀进行配置。
+13.每次打包完都需要配置index.html比较麻烦，可以使用HtmlWebpackPlugin插件进行自动化生成一个
+   index.html文件在dist目录下，还可以对这个文件的模板进行定义。
+14.webpack的plugin主要作用是，当webpack运行到某个时刻的时候，帮webpack做一些事情，有点类似
+   生命周期函数的功能。
+15.SourceMap是一个映射关系，它知道打包生成之后的js文件中的代码对应的源码在哪个文件的哪一行，方便
+   修改和排错。在配置文件中添加属性devtool: 'source-map'。
+   最佳实践：cheap-module-eval-source-map（development开发环境）
+            cheao-module-source-map（production生产环境）
+16.WebpackDevServer可以提升开发效率。
+   要实现修改入口文件index.js，webpack自动重新打包的做法：
+   第一种、在package.jso的scripts中，把前面写的"webpack"改为"webpack --watch"。实现自动监听。
+   第二种、使用WebpackDevServer。
+17.热更新模块，修改css样式和js模块的内容的时候，不会刷新页面。
