@@ -3,15 +3,16 @@ const webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   mode: 'development',
-  devtool: 'cheap-module-eval-source-map',
   devServer: {
     contentBase: './dist',
     hot: true,
     hotOnly: true
   },
-  entry: './src/index.js',
+  entry: {
+    main: './src/index.js'
+  },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
   },
   module: {
@@ -32,10 +33,19 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1,
               modules: true
             }
           }, 'postcss-loader']
+      },
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
       }
     ]
   },
@@ -44,5 +54,11 @@ module.exports = {
       template: './src/index.html'
     }),
     new webpack.HotModuleReplacementPlugin()
-  ]
+  ],
+  optimization: {
+    usedExports: true,
+    splitChunks: {
+      chunks: 'all'
+    }
+  }
 }

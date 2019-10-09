@@ -59,3 +59,29 @@
    第一种、在package.jso的scripts中，把前面写的"webpack"改为"webpack --watch"。实现自动监听。
    第二种、使用WebpackDevServer。
 17.热更新模块，修改css样式和js模块的内容的时候，不会刷新页面。
+18.使用babel处理ES6语法。安装babel-loader，@babel/core，@babel/preset-env，再按webpack文档进行
+   配置。@babel/polyfill可以帮助添加一些低版本浏览器所需要的内容。
+19.TreeShaking可以把引入模块里面不需要的代码给剔除，只支持ES Module的引入方式（import）。在开发
+   模式development下，在配置文件中添加，optimization，useExports为true。在package.json中添加
+   sideEffects：['@babel/polly-fill']，意思是使用TreeShaking时忽略该文件，这个配置主要针对
+   @babel/polly-fill这种需要引入但是有可能并没有用到里面的资源的包，如果直接设置为false，意思为
+   对所有文件都使用TreeShaking。production环境下可以不写optimization。
+20.引入webpack-merge插件可以帮助对配置文件进行拆分。项目开发时，可以把配置文件分成开发环境跟线上
+   环境的两个文件，然后把两个文件公用的部分再抽离出来写入另一个新的文件，最后通过webpack-merge插件
+   把文件关联起来使用。
+21.代码分割Code Splitting。在index.js中引入第三方的库时，webpack会把第三方库跟业务代码一起打包，
+   这样子文件会变得很大。
+   手动分割：此时可以把第三方库放在另一个js文件里，并使用window.名字 = 第三方库，把第
+   库保存到一个window的全局变量里面，在配置文件中的入口里配置这个新的js文件。这样可以把业务代码分
+   割开来。
+   自动分割：在配置文件中的optimization中添加一个splitChunks的属性，在里面添加一个chunks:'all'的
+   配置项，即可完成自动分割。
+22.把文件拆分开来之后，页面第二次加载的时候由于库文件有缓存所以会变得比较快，但是第一次加载的速度还是
+   很慢，此时就需要Prefetching和Preloading的工具。webpack支持开发者对文件使用异步加载的方式进行引入，
+   即按需引入，可以提高代码的利用率，优化代码。推荐使用Prefetching辅助使用。它的作用是在首次加载的时候
+   把必要的资源加载完成，网络资源空闲出来之后再加载其他资源。这样做的好处就是当用户点击某些功能之前就可
+   以提前把资源加载完。
+23.浏览器对文件有缓存的属性，当项目上线之后再修改里面的js代码，但是最后webpack打包生成的文件的名字没有
+   改变，所有用户再次加载页面，页面不会发生任何变化，没有加载到最新的资源。可以在webpack打包文件的时候，
+   给用户名加上一个contenthash的命名，如果开发者修改了代码重新打包，这个contenthash就会发生变化，发布
+   项目之后因为名字发生了变化，所以用户访问网站会加载到最新的资源。
