@@ -3,10 +3,14 @@ const webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   mode: 'development',
+  devtool: 'cheap-module-eval-source-map',
   devServer: {
     contentBase: './dist',
     hot: true,
-    hotOnly: true
+    hotOnly: true,
+    proxy: {
+      '/react/api': 'http://www.dell-lee.com'
+    }
   },
   entry: {
     main: './src/index.js'
@@ -43,7 +47,12 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: [['@babel/preset-env', {
+              targets: {
+                chrome: '67',
+              },
+              useBuiltIns: 'usage'
+            }]]
           }
         }
       }

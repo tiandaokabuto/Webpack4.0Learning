@@ -61,6 +61,22 @@
 17.热更新模块，修改css样式和js模块的内容的时候，不会刷新页面。
 18.使用babel处理ES6语法。安装babel-loader，@babel/core，@babel/preset-env，再按webpack文档进行
    配置。@babel/polyfill可以帮助添加一些低版本浏览器所需要的内容。
+   {
+      test: /\.js$/,
+      exclude: /(node_modules|bower_components)/,
+      use: {
+         loader: 'babel-loader',
+         options: {
+         presets: [['@babel/preset-env', {
+            targets: {
+               chrome: '67',
+            },
+            useBuiltIns: 'usage'
+         }]]
+         }
+      }
+   }
+   这样配置的话会自动引入@babel/polyfill，不需要自己手动引入。
 19.TreeShaking可以把引入模块里面不需要的代码给剔除，只支持ES Module的引入方式（import）。在开发
    模式development下，在配置文件中添加，optimization，useExports为true。在package.json中添加
    sideEffects：['@babel/polly-fill']，意思是使用TreeShaking时忽略该文件，这个配置主要针对
@@ -85,3 +101,19 @@
    改变，所有用户再次加载页面，页面不会发生任何变化，没有加载到最新的资源。可以在webpack打包文件的时候，
    给用户名加上一个contenthash的命名，如果开发者修改了代码重新打包，这个contenthash就会发生变化，发布
    项目之后因为名字发生了变化，所以用户访问网站会加载到最新的资源。
+24.垫片Shimming。有的第三方库会依赖一些其他的库，比如某个jQuery编写的UI库要依赖jQuery，或自己编写的库
+   依赖jQuery。webpack是基于模块进行打包，变量只会在当前模块中生效。如果是自己编写的库可以通过import
+   来引入jQuery，但是其他第三方的库可能是属于node_modules目录下的，不能进行修改，此时需要垫片Shimming
+   的帮助。在配置文件中使用webpack.ProvidePlugin插件，在里面配置jQuery对应的符号为$即可，同理其他库也
+   可以做类似的配置。模块中的this对应指向的是模块本身，如果要让它指向window，可以使用imports-loader。
+25.前端做开发的时候肯定会遇到发送ajax请求到服务器获取数据的情况，开发环境跟线上环境的服务器可能不一样，
+   意味着请求的地址也不一样，所以在编写ajax请求的时候不会写绝对路径。此时可以在webpack的配置文件中的
+   devServer中添加proxy配置，让webpack帮助转发请求。
+26.单页面路由在webpack上应该在配置文件中加入一个配置，historyApiFallback：true。
+27.webpack性能优化。
+   (1)跟上技术的迭代，如升级node版本，npm版本，webpack版本。
+   (2)在尽可能少的模块上使用户loader。比如使用babel-loader的时候，配置文件中加上exclude或者include来
+   指定使用该loader的文件，减少不必要的loader使用。
+   (3)plugin尽可能精简并确保可靠，尽量使用webpack官方推荐的插件。
+   (4)合理配置resolve里面的参数。
+   (5)使用DllPlugin提高打包速度。

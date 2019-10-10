@@ -38,5 +38,16 @@
 // import {add} from './math'
 // add(1, 2)
 
-import _ from 'lodash'
-console.log(_.join(['a', 'b', 'c']))
+// import _ from 'lodash'
+// console.log(_.join(['a', 'b', 'c']))
+
+import axios from 'axios'
+
+var div = document.createElement('div');
+div.innerHTML = 'Hello Word';
+document.body.append(div);
+
+axios.get('/react/api/header.json')
+.then((res) => {
+  console.log(res)
+})
